@@ -17,19 +17,19 @@ parser.add_argument("--num_trials",
                     default=3,
                     help="Recurse depth")
 
-def one_game(strategy):
+def one_game(strategy, depth=2):
     board = Board()
-    strategy_instance = strategy(board)
+    strategy_instance = strategy(board, depth)
     while True:
         dir = strategy_instance.get_next_move()
         if dir == None:
             return board
         else: board.move(dir)
 
-def play_all_games(strategy, num_trials=1):
+def play_all_games(strategy, num_trials=1, depth=2):
     score_tot = 0
     for i in range(num_trials):
-        board = one_game(strategy)
+        board = one_game(strategy, depth)
         print board
         score_tot += board.max_value()
     print score_tot / num_trials

@@ -6,7 +6,7 @@ from consts import *
 class RecurseStrategy(threes_strategy.Strategy):
     def __init__(self, board, depth=2):
         super(RecurseStrategy, self).__init__(board)
-        self.depth = 2
+        self.depth = int(depth)
 
     def get_next_move(self):
         return self.get_move_direction(self.board)
@@ -14,13 +14,13 @@ class RecurseStrategy(threes_strategy.Strategy):
     def get_move_direction(self, b):
         l_copy, r_copy, u_copy, d_copy = all_boards(b.cell_store)
 
-        l = self.score_recurse(l_copy, self.depth - 1)
+        l = self.score_recurse(l_copy, self.depth)
         if l_copy == b.cell_store:
             l = -1
         r = self.score_recurse(r_copy, self.depth)
         if r_copy == b.cell_store:
             r = -1
-        u = self.score_recurse(u_copy, self.depth - 1)
+        u = self.score_recurse(u_copy, self.depth)
         if u_copy == b.cell_store:
             u = -1
         d = self.score_recurse(d_copy, self.depth)
@@ -89,9 +89,9 @@ class RecurseStrategy(threes_strategy.Strategy):
             u = self.score_individual(u_copy)
             d = self.score_individual(d_copy) + 1
         else:
-            l = self.score_individual(l_copy)
+            l = self.score_recurse(l_copy, n - 1)
             r = self.score_recurse(r_copy, n - 1)
-            u = self.score_individual(u_copy)
+            u = self.score_recurse(u_copy, n - 1)
             d = self.score_recurse(d_copy, n - 1)
         return max([l, r, u, d])
 

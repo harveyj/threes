@@ -4,7 +4,7 @@ import threes_strategy
 import board
 
 class RandomStrategy(threes_strategy.Strategy):
-    def __init__(self, board):
+    def __init__(self, board, depth=0):
         super(RandomStrategy, self).__init__(board)
 
     def get_next_move(self):

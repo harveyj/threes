@@ -20,7 +20,7 @@ class _Getch:
 getch = _Getch()
 
 class KeyboardStrategy(threes_strategy.Strategy):
-    def __init__(self, board):
+    def __init__(self, board, depth=0):
         super(KeyboardStrategy, self).__init__(board)
 
     def get_next_move(self):
