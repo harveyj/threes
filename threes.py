@@ -33,7 +33,7 @@ def one_game(strategy, depth=2, wait=False):
 
 def play_all_games(strategy, num_trials=1, depth=2, wait=False):
     score_tot = 0
-    for i in range(num_trials):
+    for i in range(int(num_trials)):
         board = one_game(strategy, depth, wait)
         print board
         score_tot += board.max_value()
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     if args.strategy == "keyboard":
         one_game(KeyboardStrategy)
     elif args.strategy == "recurse":
-        play_all_games(RecurseStrategy, args.num_trials, args.depth, args.wait)
+        play_all_games(RecurseStrategy, int(args.num_trials), args.depth, args.wait)
     elif args.strategy == "random":
-        play_all_games(RandomStrategy, args.num_trials)
+        play_all_games(RandomStrategy, int(args.num_trials))
     else: print "ERROR: Unknown strategy"
