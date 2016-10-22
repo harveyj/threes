@@ -39,7 +39,7 @@ if __name__ == '__main__':
     if args.strategy == "keyboard":
         one_game(KeyboardStrategy)
     elif args.strategy == "recurse":
-        play_all_games(RecurseStrategy, args.num_trials)
+        play_all_games(RecurseStrategy, args.num_trials, args.depth)
     elif args.strategy == "random":
         play_all_games(RandomStrategy, args.num_trials)
     else: print "ERROR: Unknown strategy"
