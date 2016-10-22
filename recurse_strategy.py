@@ -1,15 +1,20 @@
 import copy
 import board, threes_strategy
 from consts import *
-
+from getch import *
 
 class RecurseStrategy(threes_strategy.Strategy):
     def __init__(self, board, depth=2):
         super(RecurseStrategy, self).__init__(board)
         self.depth = int(depth)
+        self.wait = False
 
     def get_next_move(self):
-        return self.get_move_direction(self.board)
+        dir = self.get_move_direction(self.board)
+        if self.wait:
+            print self.board
+            getch()
+        return dir
 
     def get_move_direction(self, b):
         l_copy, r_copy, u_copy, d_copy = all_boards(b.cell_store)
@@ -44,9 +49,30 @@ class RecurseStrategy(threes_strategy.Strategy):
         return dir
 
     def score_individual(self, cells):
-        return (10 * self.score_free_moves(cells) +
-                10 * self.score_empties(cells) +
-                self.score_max(cells))
+        return self.count_inversions(cells)
+
+    def count_inversions(self, cells):
+        num_inversions = 0
+        for r in cells:
+            c_last = 0
+            for c in r:
+                if c != 0:
+                    if c < c_last: num_inversions += 1
+                    if c != 0: c_last = c
+
+        for r in zip(*cells):
+            c_last = 0
+            for c in r:
+                if c < c_last: num_inversions += 1
+                if c != 0: c_last = c
+
+
+        if num_inversions == 0: return 1
+        else: return 1/num_inversions
+
+#        return (self.score_free_moves(cells) +
+#                self.score_empties(cells) +
+#                self.score_max(cells))
 
     def score_max(self, cells):
         import math
