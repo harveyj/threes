@@ -49,7 +49,11 @@ class RecurseStrategy(threes_strategy.Strategy):
         return dir
 
     def score_individual(self, cells):
-        return (cells[3][3] * 128 + cells[2][3] * 64 + cells[1][3] * 32 + cells[0][3] * 16)
+        return (cells[3][3] * 128 + cells[2][3] * 64 + cells[1][3] * 32 + cells[0][3] * 16 +
+                cells[3][2] * 64 + cells[2][2] * 32 + cells[1][2] * 16 + cells[0][2] * 8
+                cells[3][1] * 32 + cells[2][1] * 16 + cells[1][1] * 8 + cells[0][1] * 4
+                cells[3][0] * 16 + cells[2][0] * 8 + cells[1][0] * 4 + cells[0][0] * 2
+                )
 
 #        return (self.score_free_moves(cells) +
 #                self.score_empties(cells) +
