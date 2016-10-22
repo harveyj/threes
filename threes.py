@@ -33,7 +33,7 @@ def one_game(strategy, depth=2, wait=False):
 
 def play_all_games(strategy, num_trials=1, depth=2, wait=False):
     score_tot = 0
-    for i in range(int(num_trials)):
+    for i in range(num_trials):
         board = one_game(strategy, depth, wait)
         print board
         score_tot += board.max_value()
