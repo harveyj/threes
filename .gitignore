@@ -8,3 +8,5 @@
 .#recurse_score_strategy.py
 
 .#board.py
+
+.#keyboard_strategy.py
