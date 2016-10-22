@@ -1,0 +1,10 @@
+
+*.py~
+
+*.py#
+
+*.pyc
+
+.#recurse_score_strategy.py
+
+.#board.py
