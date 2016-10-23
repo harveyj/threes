@@ -17,7 +17,8 @@ class RecurseStrategy(threes_strategy.Strategy):
         return dir
 
     def get_move_direction(self, b):
-        l_copy, r_copy, u_copy, d_copy = all_boards(b.cell_store)
+        ab = all_boards(b.cell_store)
+        l_copy, r_copy, u_copy, d_copy = (ab[LEFT], ab[RIGHT], ab[UP], ab[DOWN])
 
         l = self.score_recurse(l_copy, self.depth)
         if l_copy == b.cell_store:
@@ -80,7 +81,8 @@ class RecurseStrategy(threes_strategy.Strategy):
         return n / 16.0
 
     def score_free_moves(self, cells):
-        l_copy, r_copy, u_copy, d_copy = all_boards(cells)
+        ab = all_boards(b.cell_store)
+        l_copy, r_copy, u_copy, d_copy = (ab[LEFT], ab[RIGHT], ab[UP], ab[DOWN])
         free_moves = 0
         if cells != l_copy:
             free_moves += 1
@@ -93,7 +95,8 @@ class RecurseStrategy(threes_strategy.Strategy):
         return free_moves / 4.0
 
     def score_recurse(self, cells, n):
-        l_copy, r_copy, u_copy, d_copy = all_boards(cells)
+        ab = all_boards(b.cell_store)
+        l_copy, r_copy, u_copy, d_copy = (ab[LEFT], ab[RIGHT], ab[UP], ab[DOWN])
         if n == 0:
             l = self.score_individual(l_copy)
             r = self.score_individual(r_copy) + 1
@@ -105,14 +108,4 @@ class RecurseStrategy(threes_strategy.Strategy):
             u = self.score_recurse(u_copy, n - 1)
             d = self.score_recurse(d_copy, n - 1)
         return max([l, r, u, d])
-
-
-# LRUD
-def all_boards(cells):
-    b = board.Board()
-    l_copy = b.transform(copy.deepcopy(cells), LEFT)
-    r_copy = b.transform(copy.deepcopy(cells), RIGHT)
-    u_copy = b.transform(copy.deepcopy(cells), UP)
-    d_copy = b.transform(copy.deepcopy(cells), DOWN)
-    return (l_copy, r_copy, u_copy, d_copy)
 
