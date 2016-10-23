@@ -59,38 +59,15 @@ class RecurseStrategy(threes_strategy.Strategy):
     def score_individual(self, brd):
         scorer = board_scorer.BoardScorer(brd)
 #        return scorer.weighted()
-        return 1.0 / scorer.count_inversions()
+#        return 1.0 / scorer.count_inversions()
+        return self.score_combined(brd)
 
     def score_combined(self, brd):
-        return (self.score_free_moves(brd) +
-                self.score_empties(brd) +
-                self.score_max(brd))
-
-    def score_max(self, brd):
-        import math
-        return math.log(brd.max_value())
-
-    def score_empties(self, brd):
-        n = 0
-        for r in cells:
-            for c in r:
-                if c == 0:
-                    n += 1
-        return n / 16.0
-
-    def score_free_moves(self, brd):
-        ab = BoardGenerator(b).all_boards()
-        l_brd, r_brd, u_brd, d_brd = (ab[LEFT], ab[RIGHT], ab[UP], ab[DOWN])
-        free_moves = 0
-        if cells != l_brd:
-            free_moves += 1
-        if cells != r_brd:
-            free_moves += 1
-        if cells != u_brd:
-            free_moves += 1
-        if cells != d_brd:
-            free_moves += 1
-        return free_moves / 4.0
+        scorer = board_scorer.BoardScorer(brd)
+        return (scorer.free_moves() +
+                scorer.empties() + 
+                scorer.inversions() + 
+                scorer.max())
 
     def score_recurse(self, brd, n):
         ab = BoardGenerator(brd).all_boards()

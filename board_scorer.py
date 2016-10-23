@@ -1,4 +1,5 @@
 from consts import *
+from board_generator import *
 
 class BoardScorer(object):
     def __init__(self, board):
@@ -12,7 +13,7 @@ class BoardScorer(object):
                 c[3][0] * 24  + c[2][0] * 8  + c[1][0] * 4  + c[0][0] * 2
                 )
 
-    def count_inversions(self):
+    def inversions(self):
         cells = self.board.cell_store
         num_inversions = 0
         for r in cells:
@@ -30,6 +31,32 @@ class BoardScorer(object):
                 c_last = c
 
         if num_inversions == 0: return 1
-        else: return num_inversions
+        else: return 1.0 / num_inversions
+
+    def free_moves(self):
+        ab = BoardGenerator(self.board).all_boards()
+        l_brd, r_brd, u_brd, d_brd = (ab[LEFT], ab[RIGHT], ab[UP], ab[DOWN])
+        free_moves = 0
+
+        if self.board != l_brd:
+            free_moves += 1
+        if self.board != u_brd:
+            free_moves += 1
+
+        return free_moves / 2.0
+
+    def empties(self):
+        n = 0
+        for r in self.board.cell_store:
+            for c in r:
+                if c == 0:
+                    n += 1
+        return n / 16.0
+
+    def max(self):
+        import math
+        return math.log(self.board.max_value())
+
+
 
 

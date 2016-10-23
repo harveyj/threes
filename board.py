@@ -22,6 +22,9 @@ class Board(object):
     def __eq__(self, brd):
         return self.cell_store == brd.cell_store
 
+    def __ne__(self, brd):
+        return not self.__eq__(brd)
+
     # Always move to the right. Just flip the board before doing
     # anything.
     # cells = transient. cell_store = permananent
