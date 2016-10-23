@@ -49,36 +49,15 @@ class RecurseStrategy(threes_strategy.Strategy):
         return dir
 
     def score_individual(self, cells):
-        return (cells[3][3] * 128 + cells[2][3] * 64 + cells[1][3] * 32 + cells[0][3] * 24 +
-                cells[3][2] * 64 + cells[2][2] * 16 + cells[1][2] * 16 + cells[0][2] * 8
-                cells[3][1] * 32 + cells[2][1] * 16 + cells[1][1] * 8 + cells[0][1] * 4
-                cells[3][0] * 24 + cells[2][0] * 8 + cells[1][0] * 4 + cells[0][0] * 2
-                )
+        b = Board()
+        b.cell_score = cells
+        scorer = BoardScorer(cells)
+        return scorer.weighted()
 
-#        return (self.score_free_moves(cells) +
-#                self.score_empties(cells) +
-#                self.score_max(cells))
-
-
-    # Wow. I couldn't have done something this horrible if I tried.
-    def count_inversions(self, cells):
-        num_inversions = 0
-        for r in cells:
-            c_last = 0
-            for c in r:
-                if c != 0:
-                    if c < c_last: num_inversions += 1
-                    if c != 0: c_last = c
-
-        for r in zip(*cells):
-            c_last = 0
-            for c in r:
-                if c < c_last: num_inversions += 1
-                if c != 0: c_last = c
-
-
-        if num_inversions == 0: return 1
-        else: return 1/num_inversions
+    def score_combined(self, cells):
+        return (self.score_free_moves(cells) +
+                self.score_empties(cells) +
+                self.score_max(cells))
 
     def score_max(self, cells):
         import math
