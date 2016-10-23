@@ -12,22 +12,22 @@ class BoardScorer(object):
                 c[3][0] * 24  + c[2][0] * 8  + c[1][0] * 4  + c[0][0] * 2
                 )
 
-    # Wow. I couldn't have done something this horrible if I tried.
     def count_inversions(self):
         cells = self.board.cell_store
         num_inversions = 0
         for r in cells:
             c_last = 0
             for c in r:
-                if c != 0:
-                    if c < c_last: num_inversions += 1
-                    if c != 0: c_last = c
+                if c < c_last:
+                    num_inversions += 1
+                c_last = c
 
         for r in zip(*cells):
             c_last = 0
             for c in r:
-                if c < c_last: num_inversions += 1
-                if c != 0: c_last = c
+                if c < c_last:
+                    num_inversions += 1
+                c_last = c
 
         if num_inversions == 0: return 1
         else: return num_inversions
