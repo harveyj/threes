@@ -18,7 +18,7 @@ parser.add_argument("--num_trials",
                     default=3,
                     help="Recurse depth")
 parser.add_argument("--wait",
-                    default=False,
+                    default=0,
                     help="wait each keypress on iteration")
 
 def one_game(strategy, depth=2, wait=False):
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     if args.strategy == "keyboard":
         one_game(KeyboardStrategy)
     elif args.strategy == "recurse":
-        play_all_games(RecurseStrategy, int(args.num_trials), args.depth, args.wait)
+        play_all_games(RecurseStrategy, int(args.num_trials), args.depth, int(args.wait))
     elif args.strategy == "random":
         play_all_games(RandomStrategy, int(args.num_trials))
     else: print "ERROR: Unknown strategy"

@@ -1,37 +1,42 @@
 import copy
 import board, threes_strategy
+import board_scorer
 from consts import *
 from getch import *
+from board_generator import *
 
 class RecurseStrategy(threes_strategy.Strategy):
-    def __init__(self, board, depth=2):
-        super(RecurseStrategy, self).__init__(board)
+    def __init__(self, brd, depth=2):
+        super(RecurseStrategy, self).__init__(brd)
         self.depth = int(depth)
         self.wait = False
 
     def get_next_move(self):
         dir = self.get_move_direction(self.board)
+        print self.board.max_value()
         if self.wait:
             print self.board
             getch()
         return dir
 
-    def get_move_direction(self, b):
-        l_copy, r_copy, u_copy, d_copy = all_boards(b.cell_store)
+    def get_move_direction(self, brd):
+        ab = BoardGenerator(brd).all_boards()
+        l_brd, r_brd, u_brd, d_brd = (ab[LEFT], ab[RIGHT], ab[UP], ab[DOWN])
 
-        l = self.score_recurse(l_copy, self.depth)
-        if l_copy == b.cell_store:
+        l = self.score_recurse(l_brd, self.depth)
+        if l_brd == brd:
             l = -1
-        r = self.score_recurse(r_copy, self.depth)
-        if r_copy == b.cell_store:
+        r = self.score_recurse(r_brd, self.depth)
+        if r_brd == brd:
             r = -1
-        u = self.score_recurse(u_copy, self.depth)
-        if u_copy == b.cell_store:
+        u = self.score_recurse(u_brd, self.depth)
+        if u_brd == brd:
             u = -1
-        d = self.score_recurse(d_copy, self.depth)
-        if d_copy == b.cell_store:
+        d = self.score_recurse(d_brd, self.depth)
+        if d_brd == brd:
             d = -1
 
+        print u, d, l, r
         if u == d == r == l == -1:
             return None
 
@@ -48,45 +53,20 @@ class RecurseStrategy(threes_strategy.Strategy):
             dir = DOWN
         return dir
 
-    def score_individual(self, cells):
-        return self.count_inversions(cells)
+    def score_individual(self, brd):
+        scorer = board_scorer.BoardScorer(brd)
+        return scorer.weighted()
 
-    def count_inversions(self, cells):
-        num_inversions = 0
-        for r in cells:
-            c_last = 0
-            for c in r:
-                if c != 0:
-                    if c < c_last: num_inversions += 1
-                    if c != 0: c_last = c
+    def score_combined(self, brd):
+        return (self.score_free_moves(brd) +
+                self.score_empties(brd) +
+                self.score_max(brd))
 
-        for r in zip(*cells):
-            c_last = 0
-            for c in r:
-                if c < c_last: num_inversions += 1
-                if c != 0: c_last = c
-
-
-        if num_inversions == 0: return 1
-        else: return 1/num_inversions
-
-#        return (self.score_free_moves(cells) +
-#                self.score_empties(cells) +
-#                self.score_max(cells))
-
-    def score_max(self, cells):
+    def score_max(self, brd):
         import math
-        return math.log(self.max_value(cells))
+        return math.log(brd.max_value())
 
-    def max_value(self, cells):
-        max = 0
-        for r in cells:
-            for c in r:
-                if c > max:
-                    max = c
-        return max
-
-    def score_empties(self, cells):
+    def score_empties(self, brd):
         n = 0
         for r in cells:
             for c in r:
@@ -94,40 +74,32 @@ class RecurseStrategy(threes_strategy.Strategy):
                     n += 1
         return n / 16.0
 
-    def score_free_moves(self, cells):
-        l_copy, r_copy, u_copy, d_copy = all_boards(cells)
+    def score_free_moves(self, brd):
+        ab = BoardGenerator(b).all_boards()
+        l_brd, r_brd, u_brd, d_brd = (ab[LEFT], ab[RIGHT], ab[UP], ab[DOWN])
         free_moves = 0
-        if cells != l_copy:
+        if cells != l_brd:
             free_moves += 1
-        if cells != r_copy:
+        if cells != r_brd:
             free_moves += 1
-        if cells != u_copy:
+        if cells != u_brd:
             free_moves += 1
-        if cells != d_copy:
+        if cells != d_brd:
             free_moves += 1
         return free_moves / 4.0
 
-    def score_recurse(self, cells, n):
-        l_copy, r_copy, u_copy, d_copy = all_boards(cells)
+    def score_recurse(self, brd, n):
+        ab = BoardGenerator(brd).all_boards()
+        l_brd, r_brd, u_brd, d_brd = (ab[LEFT], ab[RIGHT], ab[UP], ab[DOWN])
         if n == 0:
-            l = self.score_individual(l_copy)
-            r = self.score_individual(r_copy) + 1
-            u = self.score_individual(u_copy)
-            d = self.score_individual(d_copy) + 1
+            l = self.score_individual(l_brd)
+            r = self.score_individual(r_brd) + 1
+            u = self.score_individual(u_brd)
+            d = self.score_individual(d_brd) + 1
         else:
-            l = self.score_recurse(l_copy, n - 1)
-            r = self.score_recurse(r_copy, n - 1)
-            u = self.score_recurse(u_copy, n - 1)
-            d = self.score_recurse(d_copy, n - 1)
+            l = self.score_recurse(l_brd, n - 1)
+            r = self.score_recurse(r_brd, n - 1)
+            u = self.score_recurse(u_brd, n - 1)
+            d = self.score_recurse(d_brd, n - 1)
         return max([l, r, u, d])
-
-
-# LRUD
-def all_boards(cells):
-    b = board.Board()
-    l_copy = b.transform(copy.deepcopy(cells), LEFT)
-    r_copy = b.transform(copy.deepcopy(cells), RIGHT)
-    u_copy = b.transform(copy.deepcopy(cells), UP)
-    d_copy = b.transform(copy.deepcopy(cells), DOWN)
-    return (l_copy, r_copy, u_copy, d_copy)
 

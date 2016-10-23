@@ -7,8 +7,8 @@ class BoardGenerator(object):
 
     def all_boards(self):
         boards = {}
-        boards[LEFT]  = board.Board(self.board)
-        boards[RIGHT] = board.Board(self.board)
-        boards[UP]    = board.Board(self.board)
-        boards[DOWN]  = board.Board(self.board)
+        boards[LEFT]  = board.Board(self.board).move(LEFT)
+        boards[RIGHT] = board.Board(self.board).move(RIGHT)
+        boards[UP]    = board.Board(self.board).move(UP)
+        boards[DOWN]  = board.Board(self.board).move(DOWN)
         return boards

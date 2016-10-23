@@ -10,3 +10,5 @@
 .#board.py
 
 .#keyboard_strategy.py
+
+.#board_scorer.py

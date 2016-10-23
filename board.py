@@ -2,10 +2,25 @@ import random, copy
 from consts import *
 
 class Board(object):
-    def __init__(self):
-        self.cell_store = [[0,0,0,0],[3,0,0,0],[0,0,0,0],[0,0,0,0]]
+    def __init__(self, brd=None):
+        if brd:
+            self.cell_store = copy.deepcopy(brd.cell_store)
+        else:
+            self.cell_store = [[0,0,0,0],[3,0,0,0],[0,0,0,0],[0,0,0,0]]
+
         self.next_queue = []
         self.next = self.pop_next_val()
+
+    def __str__(self):
+        r = ""
+        r += "\t".join(map(str, self.cell_store[0])) + "\n"
+        r += "\t".join(map(str, self.cell_store[1])) + "\n"
+        r += "\t".join(map(str, self.cell_store[2])) + "\n"
+        r += "\t".join(map(str, self.cell_store[3])) + "\n"
+        return r
+
+    def __eq__(self, brd):
+        return self.cell_store == brd.cell_store
 
     # Always move to the right. Just flip the board before doing
     # anything.
@@ -13,6 +28,7 @@ class Board(object):
     def move(self, direction):
         self.cell_store = self.transform(
             copy.deepcopy(self.cell_store), direction)
+        return self
 
     def transform(self, cells, direction):
         cells = self.transpose(cells, direction)
@@ -95,14 +111,6 @@ class Board(object):
         tgt_row = random.randint(0, len(rows) - 1)
         rows[tgt_row][0] = next_val
 
-    def __str__(self):
-        r = ""
-        r += "\t".join(map(str, self.cell_store[0])) + "\n"
-        r += "\t".join(map(str, self.cell_store[1])) + "\n"
-        r += "\t".join(map(str, self.cell_store[2])) + "\n"
-        r += "\t".join(map(str, self.cell_store[3])) + "\n"
-        return r
-
     def max_value(self):
         max = 0
         for r in self.cell_store:
@@ -110,4 +118,3 @@ class Board(object):
                 if c > max:
                     max = c
         return max
-
