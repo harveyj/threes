@@ -3,6 +3,8 @@ import threes_strategy
 from keyboard_strategy import *
 from recurse_strategy import *
 from random_strategy import *
+from down_right_strategy import *
+from last_move_strategy import *
 from consts import *
 from board import *
 from getch import *
@@ -48,4 +50,8 @@ if __name__ == '__main__':
         play_all_games(RecurseStrategy, int(args.num_trials), args.depth, int(args.wait))
     elif args.strategy == "random":
         play_all_games(RandomStrategy, int(args.num_trials))
+    elif args.strategy == "dr":
+        play_all_games(DownRightStrategy, int(args.num_trials), 0, int(args.wait))
+    elif args.strategy == "lm":
+        play_all_games(LastMoveStrategy, int(args.num_trials), 0, int(args.wait))
     else: print "ERROR: Unknown strategy"

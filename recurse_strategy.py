@@ -64,10 +64,12 @@ class RecurseStrategy(threes_strategy.Strategy):
 
     def score_combined(self, brd):
         scorer = board_scorer.BoardScorer(brd)
-        return (scorer.free_moves() +
-                scorer.empties() + 
-                scorer.inversions() + 
-                scorer.max())
+        return (
+            scorer.free_moves() +
+            scorer.empties() + 
+#           scorer.inversions() + 
+            scorer.max()
+            )
 
     def score_recurse(self, brd, n):
         ab = BoardGenerator(brd).all_boards()
