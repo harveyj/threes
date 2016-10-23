@@ -5,6 +5,8 @@ from consts import *
 from getch import *
 from board_generator import *
 
+DEBUG=False
+
 class RecurseStrategy(threes_strategy.Strategy):
     def __init__(self, brd, depth=2):
         super(RecurseStrategy, self).__init__(brd)
@@ -36,7 +38,8 @@ class RecurseStrategy(threes_strategy.Strategy):
         if d_brd == brd:
             d = -1
 
-        print u, d, l, r
+        if DEBUG:
+            print u, d, l, r
         if u == d == r == l == -1:
             return None
 
@@ -55,7 +58,8 @@ class RecurseStrategy(threes_strategy.Strategy):
 
     def score_individual(self, brd):
         scorer = board_scorer.BoardScorer(brd)
-        return scorer.weighted()
+#        return scorer.weighted()
+        return 1.0 / scorer.count_inversions()
 
     def score_combined(self, brd):
         return (self.score_free_moves(brd) +

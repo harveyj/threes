@@ -30,6 +30,6 @@ class BoardScorer(object):
                 if c != 0: c_last = c
 
         if num_inversions == 0: return 1
-        else: return 1/num_inversions
+        else: return num_inversions
 
 

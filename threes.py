@@ -21,6 +21,8 @@ parser.add_argument("--wait",
                     default=0,
                     help="wait each keypress on iteration")
 
+args = parser.parse_args()
+
 def one_game(strategy, depth=2, wait=False):
     board = Board()
     strategy_instance = strategy(board, depth)
@@ -40,7 +42,6 @@ def play_all_games(strategy, num_trials=1, depth=2, wait=False):
     print score_tot / num_trials
 
 if __name__ == '__main__':
-    args = parser.parse_args()
     if args.strategy == "keyboard":
         one_game(KeyboardStrategy)
     elif args.strategy == "recurse":
