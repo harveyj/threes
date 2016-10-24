@@ -15,7 +15,9 @@ class RecurseStrategy(threes_strategy.Strategy):
 
     def get_next_move(self):
         dir = self.get_move_direction(self.board)
-        print self.board.max_value()
+        print (self.board.max_value(),
+               self.board.cell_store[3][3] == self.board.max_value(),
+               board_scorer.BoardScorer(self.board).combined())
         if self.wait:
             print self.board
             getch()
@@ -58,27 +60,16 @@ class RecurseStrategy(threes_strategy.Strategy):
 
     def score_individual(self, brd):
         scorer = board_scorer.BoardScorer(brd)
-#        return scorer.weighted()
-#        return 1.0 / scorer.count_inversions()
-        return self.score_combined(brd)
-
-    def score_combined(self, brd):
-        scorer = board_scorer.BoardScorer(brd)
-        return (
-            scorer.free_moves() +
-            scorer.empties() + 
-#           scorer.inversions() + 
-            scorer.max()
-            )
+        return scorer.combined()
 
     def score_recurse(self, brd, n):
         ab = BoardGenerator(brd).all_boards()
         l_brd, r_brd, u_brd, d_brd = (ab[LEFT], ab[RIGHT], ab[UP], ab[DOWN])
         if n == 0:
             l = self.score_individual(l_brd)
-            r = self.score_individual(r_brd) + 1
+            r = self.score_individual(r_brd)
             u = self.score_individual(u_brd)
-            d = self.score_individual(d_brd) + 1
+            d = self.score_individual(d_brd)
         else:
             l = self.score_recurse(l_brd, n - 1)
             r = self.score_recurse(r_brd, n - 1)
