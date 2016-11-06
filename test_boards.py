@@ -79,3 +79,13 @@ def nice_board():
         [1, 3,  0, 48],
         ]
     return b
+
+def right_board():
+    b = Board()
+    b.cell_store = [
+        [0, 0, 0,  1],
+        [0, 3, 1,  6],
+        [0, 0, 0,  6],
+        [0, 0, 12, 12],
+        ]
+    return b

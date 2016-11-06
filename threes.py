@@ -26,14 +26,17 @@ parser.add_argument("--wait",
 args = parser.parse_args()
 
 def one_game(strategy, depth=2, wait=False):
-    board = Board()
-    strategy_instance = strategy(board, depth)
-    strategy_instance.wait = wait
-    while True:
-        dir = strategy_instance.get_next_move()
-        if dir == None:
-            return board
-        else: board.move(dir)
+    try:
+        board = Board()
+        strategy_instance = strategy(board, depth)
+        strategy_instance.wait = wait
+        while True:
+            dir = strategy_instance.get_next_move()
+            if dir == None:
+                return board
+            else: board.move(dir)
+    except KeyboardInterrupt:
+        print board
 
 def play_all_games(strategy, num_trials=1, depth=2, wait=False):
     score_tot = 0
@@ -42,7 +45,6 @@ def play_all_games(strategy, num_trials=1, depth=2, wait=False):
         print board
         score_tot += board.max_value()
     print score_tot / num_trials
-
 if __name__ == '__main__':
     if args.strategy == "keyboard":
         one_game(KeyboardStrategy)

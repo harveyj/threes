@@ -14,3 +14,7 @@
 .#board_scorer.py
 
 .#board_scorer_test.py
+
+.#board_generator.py
+
+.#recurse_strategy_test.py
