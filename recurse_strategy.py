@@ -15,7 +15,9 @@ class RecurseStrategy(threes_strategy.Strategy):
 
     def get_next_move(self):
         dir = self.get_move_direction(self.board)
-        print (self.board.max_value(),
+        bs = board_scorer.BoardScorer(self.board)
+        print ("Max:" + str(self.board.max_value()),
+               "Free Moves" + str(bs.free_moves()),
                self.board.cell_store[3][3] == self.board.max_value(),
                board_scorer.BoardScorer(self.board).combined())
         print d(dir)
@@ -55,7 +57,7 @@ class RecurseStrategy(threes_strategy.Strategy):
         for p in pbs:
             s = self.score_individual(p.board)
             if p.path[0] in [DOWN, RIGHT]:
-                s += 0.1
+                s += 0.3
             if s > max_score:
                 max_score = s
                 max_pb = p

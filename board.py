@@ -3,13 +3,16 @@ from consts import *
 
 class Board(object):
     def __init__(self, brd=None):
+        self.next_queue = []
         if brd:
             self.cell_store = copy.deepcopy(brd.cell_store)
+            self.next = brd.next
+            self.next_queue = copy.deepcopy(brd.next_queue)
+            random.shuffle(self.next_queue)
         else:
             self.cell_store = [[0,0,0,0],[3,0,0,0],[0,0,0,0],[0,0,0,0]]
+            self.next = self.pop_next_val()
 
-        self.next_queue = []
-        self.next = self.pop_next_val()
 
     def __str__(self):
         r = ""

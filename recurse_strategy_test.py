@@ -43,7 +43,36 @@ class TestRecurseStrategy(unittest.TestCase):
         r.depth = 1
         print r.score_iter(b, 1)
         self.assertEquals("RIGHT", d(r.get_move_direction(b)))
-    
+
+    def test_wtf2(self):
+        b = Board()
+
+        b.cell_store = [
+            [0,0,0,1],
+            [3,2,6,12],
+            [1,0,6,48],
+            [0,2,0,192]]
+
+        r = RecurseStrategy(b)
+        r.depth = 4
+        print r.score_iter(b, 1)
+ #       self.assertEquals("DOWN", d(r.get_move_direction(b)))
+   
+
+    def test_wtf3(self):
+        b = Board()
+
+        b.cell_store = [
+            [1,2,3,2],
+            [0,6,12,24],
+            [3,3,6,48],
+            [1,6,24,192],
+            ]
+        b.next = 2
+        r = RecurseStrategy(b)
+        r.depth = 4
+        print r.score_iter(b, 1)
+        self.assertEquals("RIGHT", d(r.get_move_direction(b)))
 
 if __name__ == '__main__':
     unittest.main()
